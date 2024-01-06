@@ -1,15 +1,20 @@
-import Head from 'next/head'
-import Image from 'next/image'
-import { Inter } from '@next/font/google'
-import styles from '@/styles/Home.module.css'
-import { useAuthState } from 'react-firebase-hooks/auth'
-import { auth } from '@/firebase/clientApp'
+import { authModalState } from "@/atoms/authModalAtom";
+import { auth } from "@/firebase/clientApp";
+import { Button, Stack } from "@chakra-ui/react";
+import { Inter } from "@next/font/google";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { useRecoilValue } from "recoil";
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
-  const [user, loadingUser] = useAuthState(auth)
+  const [user, loadingUser] = useAuthState(auth);
+
+  const modalState = useRecoilValue(authModalState);
   return (
-    <div style={{height:"100vh"}}>{user ? 'hi user' : 'hi'}</div>
-  )
+    <Stack justify="center" align="center" height="100vh">
+      <h1 style={{ fontSize: "100pt" }}>Comp2Phone</h1>
+      <Button size="lg">Go to your files</Button>
+    </Stack>
+  );
 }
