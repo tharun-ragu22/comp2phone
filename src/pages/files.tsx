@@ -1,5 +1,5 @@
 import FileUploadButton from "@/components/Files/FileUploadButton";
-import { auth } from "@/firebase/clientApp";
+import { auth, firestore } from "@/firebase/clientApp";
 import {
   Button,
   Flex,
@@ -18,16 +18,40 @@ import {
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
+import { collection, getDocs, query } from "firebase/firestore";
+import { User } from "firebase/auth";
 
 const files: React.FC = () => {
   const router = useRouter();
+  const getUserFiles = async (user: User) => {
+    const filesQuery = query(
+      collection(firestore, "users/" + user.uid + "/files")
+    );
+
+    const filesDocs = await getDocs(filesQuery);
+
+    const filesData = filesDocs.docs.map((doc) => {
+      return {
+        id: doc.id,
+        ...doc.data(),
+      };
+    });
+
+    console.log(filesData);
+  };
+  const data = [
+    [0, 1, 2, 3],
+    [0, 1, 2, 3],
+    [0, 1, 2, 3],
+  ];
 
   const [user, loadingUser] = useAuthState(auth);
+  if (user) getUserFiles(user);
   //   useEffect(() => {
   //     if (!user) {
   //       router.push(`/`);
   //     }
-  //   }, [user]);
+  //   }, [user]);[0]._document.data.value.mapValue.fields.fileExt
 
   return (
     <>
@@ -53,29 +77,25 @@ const files: React.FC = () => {
           >
             <TableContainer width="100%">
               <Table variant="striped">
-                {/* <Thead>
-              <Tr>
-                <Th>To convert</Th>
-                <Th>into</Th>
-                <Th isNumeric>multiply by</Th>
-              </Tr>
-            </Thead> */}
+                <Thead>
+                  <Tr>
+                    <Th>File Name</Th>
+                    <Th>Date</Th>
+                    <Th>Size</Th>
+                    <Th>Action</Th>
+                  </Tr>
+                </Thead>
                 <Tbody>
-                  <Tr>
-                    <Td>inches</Td>
-                    <Td>millimetres (mm)</Td>
-                    <Td isNumeric>25.4</Td>
-                  </Tr>
-                  <Tr>
-                    <Td>feet</Td>
-                    <Td>centimetres (cm)</Td>
-                    <Td isNumeric>30.48</Td>
-                  </Tr>
-                  <Tr>
-                    <Td>yards</Td>
-                    <Td>metres (m)</Td>
-                    <Td isNumeric>0.91444</Td>
-                  </Tr>
+                  {data.map((item) => (
+                    // <Tr>
+                    //   <Td>{item}</Td>
+                    // </Tr>
+                    <Tr>
+                      {item.map((item) => (
+                        <Td>{item}</Td>
+                      ))}
+                    </Tr>
+                  ))}
                 </Tbody>
                 {/* <Tfoot>
               <Tr>

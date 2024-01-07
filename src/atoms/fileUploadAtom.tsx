@@ -5,6 +5,9 @@ export type FileUpload = {
   userId: string;
   fileURL: string | null;
   uploadedAt: Timestamp;
+  fileName: string;
+  fileExt: string;
+  byteSize: number;
 };
 
 interface FileUploadState {
