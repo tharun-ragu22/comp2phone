@@ -1,3 +1,4 @@
+import FileUploadButton from "@/components/Files/FileUploadButton";
 import { auth } from "@/firebase/clientApp";
 import {
   Button,
@@ -40,20 +41,7 @@ const files: React.FC = () => {
         {/* <Button variant="outline" height="28px" size="lg" onClick={() => {}}>
           Upload
         </Button> */}
-        <Flex
-          border="2px dashed"
-          borderRadius={10}
-          p={6}
-          height="25%"
-          width="30%"
-          cursor="pointer"
-          align="center"
-          justify="center"
-        >
-          <Text fontSize="25pt" fontWeight={400}>
-            Upload
-          </Text>
-        </Flex>
+        {user && <FileUploadButton user={user} />}
       </Flex>
       <Flex
         height="auto"
