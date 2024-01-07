@@ -6,7 +6,7 @@ import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
 import { auth, firestore } from "@/firebase/clientApp";
 import { FIREBASE_ERRORS } from "@/firebase/errors";
 import { User } from "firebase/auth";
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, collection, doc, setDoc } from "firebase/firestore";
 type SignUpProps = {};
 
 const SignUp: React.FC<SignUpProps> = () => {
@@ -40,17 +40,15 @@ const SignUp: React.FC<SignUpProps> = () => {
   };
 
   const createUserDocument = async (user: User) => {
-    await addDoc(
-      collection(firestore, "users"),
-      JSON.parse(JSON.stringify(user))
-    );
+    const userRef = doc(firestore, "users", user.uid);
+    await setDoc(userRef, JSON.parse(JSON.stringify(user)));
   };
 
   useEffect(() => {
     if (userCred) {
       createUserDocument(userCred.user);
     }
-  }, [userCred]);
+  });
   return (
     <form onSubmit={onSubmit}>
       <Input
